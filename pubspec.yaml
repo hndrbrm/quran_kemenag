@@ -6,8 +6,13 @@ version: 1.0.0
 environment:
   sdk: '>=2.18.4 <3.0.0'
 
-# dependencies:
-#   path: ^1.8.0
+dependencies:
+  http: ^0.13.5
+
+  quran_transliteration:
+    git:
+      url: https://github.com/hndrbrm/quran_transliteration
+      ref: b833d9c2266c3175df9ba4eaa8f1e28e4932939b
 
 dev_dependencies:
   lints: ^2.0.0
