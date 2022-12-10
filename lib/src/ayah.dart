@@ -2,13 +2,12 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:quran_transliteration/quran_transliteration.dart';
-
 class Ayah {
   const Ayah._(
     this.location,
     this.transliterate,
     this.translate,
+    this.annotation,
   );
 
   factory Ayah.parse(String source) {
@@ -16,12 +15,13 @@ class Ayah {
     assert(source[0] != '#');
 
     final List<String> parts = source.split('\t').map((e) => e.trim()).toList();
-    assert(parts.length == 3);
+    assert(parts.length == 4);
 
     return Ayah._(
       Location.parse(parts[0]),
       parts[1],
       parts[2],
+      Annotation.parse(parts[3]),
     );
   }
 
@@ -30,15 +30,17 @@ class Ayah {
       Location.fromJson(json),
       json['teks_ayat'].trim(),
       json['teks_terjemah'].trim(),
+      Annotation.fromJson(json),
     );
   }
 
   final Location location;
   final String transliterate;
   final String translate;
+  final Annotation annotation;
 
   @override
-  String toString() => '$location\t$transliterate\t$translate';
+  String toString() => '$location\t$transliterate\t$translate\t$annotation';
 }
 
 class Location {
@@ -69,4 +71,25 @@ class Location {
 
   @override
   String toString() => '($surah:$ayah)';
+}
+
+class Annotation {
+  const Annotation._(this.contents);
+
+  factory Annotation.parse(String source) {
+    return Annotation._(
+      source.split('|'),
+    );
+  }
+
+  factory Annotation.fromJson(Map<String, dynamic> json) {
+    return Annotation._(
+      json['teks_fn'].trim().split('</br>'),
+    );
+  }
+
+  final List<String> contents;
+
+  @override
+  String toString() => contents.join('|');
 }
