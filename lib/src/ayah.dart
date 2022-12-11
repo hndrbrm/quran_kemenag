@@ -8,6 +8,8 @@ class Ayah {
     this.transliterate,
     this.translate,
     this.annotation,
+    this.tafsirWajiz,
+    this.tafsirTahlili,
   );
 
   factory Ayah.parse(String source) {
@@ -15,13 +17,15 @@ class Ayah {
     assert(source[0] != '#');
 
     final List<String> parts = source.split('\t').map((e) => e.trim()).toList();
-    assert(parts.length == 4);
+    assert(parts.length == 6);
 
     return Ayah._(
       Location.parse(parts[0]),
       parts[1],
       parts[2],
       Annotation.parse(parts[3]),
+      parts[4],
+      parts[5],
     );
   }
 
@@ -31,6 +35,8 @@ class Ayah {
       json['teks_ayat'].trim(),
       json['teks_terjemah'].trim(),
       Annotation.fromJson(json),
+      '',
+      '',
     );
   }
 
@@ -38,9 +44,29 @@ class Ayah {
   final String transliterate;
   final String translate;
   final Annotation annotation;
+  final String tafsirWajiz;
+  final String tafsirTahlili;
+
+  Ayah copyWith({
+    Location? location,
+    String? transliterate,
+    String? translate,
+    Annotation? annotation,
+    String? tafsirWajiz,
+    String? tafsirTahlili,
+  }) {
+    return Ayah._(
+      location ?? this.location,
+      transliterate ?? this.transliterate,
+      translate ?? this.translate,
+      annotation ?? this.annotation,
+      tafsirWajiz ?? this.tafsirWajiz,
+      tafsirTahlili ?? this.tafsirTahlili,
+    );
+  }
 
   @override
-  String toString() => '$location\t$transliterate\t$translate\t$annotation';
+  String toString() => '$location\t$transliterate\t$translate\t$annotation\t$tafsirWajiz\t$tafsirTahlili';
 }
 
 class Location {

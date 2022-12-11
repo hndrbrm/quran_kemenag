@@ -7,9 +7,11 @@ import 'dart:io';
 import 'package:quran_kemenag/quran_kemenag.dart';
 
 Future<void> main() async {
+  int tafsirAyah = 0;
+
   final StringBuffer contents = StringBuffer();
   contents.write('# ${DateTime.now()}\n');
-  contents.write('LOCATION\tTRANSLITERATE\tTRANSLATE\tANNOTATION\n');
+  contents.write('LOCATION\tTRANSLITERATE\tTRANSLATE\tANNOTATION\tTAFSIR_WAJIZ\tTAFSIR_TAHLILI\n');
 
   final Map<String, dynamic> surahs = await Api.getSurah(0, 114);
   for (int i = 0; i < 114; i++) {
@@ -31,7 +33,17 @@ Future<void> main() async {
         print('Parsing surah ${i + 1} ayah ${j + 1}');
         return true;
       }());
-      final Ayah ayah = Ayah.fromJson(ayahs['data'][j]);
+      Ayah ayah = Ayah.fromJson(ayahs['data'][j]);
+
+      tafsirAyah++;
+      final Map<String, dynamic> tafsir = await Api.getTafsir(tafsirAyah);
+      assert(tafsir['tafsir'].length == 1);
+      ayah = ayah.copyWith(
+        tafsirWajiz: tafsir['tafsir'].first['tafsir_wajiz'],
+        tafsirTahlili: tafsir['tafsir'].first['tafsir_tahlili'],
+      );
+      await Future.delayed(Duration(seconds: 1));
+
       contents.write('$ayah\n');
     }
     await Future.delayed(Duration(seconds: 3));

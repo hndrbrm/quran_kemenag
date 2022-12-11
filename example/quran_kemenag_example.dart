@@ -9,4 +9,6 @@ Future<void> main(List<String> arguments) async {
   print(suras);
   final Map<String, dynamic> ayahs = await Api.getAyah(1, 0, 0, 7);
   print(ayahs);
+  final Map<String, dynamic> tafsirs = await Api.getTafsir(1);
+  print(tafsirs);
 }

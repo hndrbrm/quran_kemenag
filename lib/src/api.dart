@@ -68,4 +68,23 @@ class Api {
 
     return json;
   }
+
+  /// Get detail information on a certain ayah.
+  ///
+  /// Argument [ayah] is the starting ayah index which will be retrieved.
+  /// The value start from 1.
+  static Future<Map<String, dynamic>> getTafsir(int ayah) async {
+    assert(1 <= ayah);
+
+    final String url = '$_url/tafsirbyayat/$ayah';
+
+    final Uri uri = Uri.parse(url);
+    final HttpClient client = HttpClient();
+    final HttpClientRequest request = await client.getUrl(uri);
+    final HttpClientResponse response = await request.close();
+    final String content = await response.transform(utf8.decoder).join();
+    final Map<String, dynamic> json = jsonDecode(content);
+
+    return json;
+  }
 }
