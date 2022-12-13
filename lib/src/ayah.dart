@@ -2,6 +2,8 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:convert';
+
 class Ayah {
   const Ayah._(
     this.location,
@@ -24,8 +26,8 @@ class Ayah {
       parts[1],
       parts[2],
       Annotation.parse(parts[3]),
-      parts[4],
-      parts[5],
+      utf8.decode(base64.decode(parts[4])),
+      utf8.decode(base64.decode(parts[5])),
     );
   }
 

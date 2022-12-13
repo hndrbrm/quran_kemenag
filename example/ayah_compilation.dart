@@ -2,6 +2,7 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:quran_kemenag/quran_kemenag.dart';
@@ -39,14 +40,14 @@ Future<void> main() async {
       final Map<String, dynamic> tafsir = await Api.getTafsir(tafsirAyah);
       assert(tafsir['tafsir'].length == 1);
       ayah = ayah.copyWith(
-        tafsirWajiz: tafsir['tafsir'].first['tafsir_wajiz'],
-        tafsirTahlili: tafsir['tafsir'].first['tafsir_tahlili'],
+        tafsirWajiz: base64.encode(utf8.encode(tafsir['tafsir'].first['tafsir_wajiz'])),
+        tafsirTahlili: base64.encode(utf8.encode(tafsir['tafsir'].first['tafsir_tahlili'])),
       );
       await Future.delayed(Duration(seconds: 1));
 
       contents.write('$ayah\n');
     }
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
   }
 
   final File file = File('ayahs.tsv');
